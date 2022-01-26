@@ -10,4 +10,4 @@ Achieved Goals:
 
 Result:
 
-<img src="./example.png">
+<img src="https://github.com/tomereliel0/react-native-resizable-flex-panes/blob/master/example.PNG?raw=true">
