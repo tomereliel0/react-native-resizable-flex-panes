@@ -1,16 +1,20 @@
+/* source:      https://github.com/brucelin0325/react-native-resizable-flex-panes */
+
 import React, { Component } from 'react'; 
 import { StyleSheet, View, Dimensions, PanResponder, Animated } from 'react-native';
+import Explorer from './Explorer';
+import TextEditor from './TextEditor';
 
-export default class MyComponent extends Component {
+export default class SplitView extends Component {
 
     constructor(props) {
         super(props);
 
         this.state = {
             offset          : 0,
-            topHeight       : 40, // min height for top pane header
-            bottomHeight    : 40, // min height for bottom pane header,
-            deviceHeight    : Dimensions.get('window').height,
+            leftWidth       : 40,
+            rightWidth      : 40,
+            deviceWidth     : Dimensions.get('screen').width,
             isDividerClicked: false,
 
             pan             : new Animated.ValueXY()
@@ -20,10 +24,10 @@ export default class MyComponent extends Component {
             onMoveShouldSetResponderCapture: () => true,
             onMoveShouldSetPanResponderCapture: () => true,
 
-            // Initially, set the Y position offset when touch start
+            // Initially, set the X position offset when touch start
             onPanResponderGrant: (e, gestureState) => {
                 this.setState({
-                    offset: e.nativeEvent.pageY,
+                    offset: e.nativeEvent.pageX,
                     isDividerClicked: true
                 })
             },
@@ -32,15 +36,15 @@ export default class MyComponent extends Component {
             onPanResponderMove: (e, gestureState) => {
 
                 this.setState({
-                    bottomHeight    : gestureState.moveY > (this.state.deviceHeight - 40) ? 40 : this.state.deviceHeight - gestureState.moveY,
-                    offset: e.nativeEvent.pageY
+                    rightWidth    : gestureState.moveX > (this.state.deviceWidth - 40) ? 40 : this.state.deviceWidth - gestureState.moveX,
+                    offset: e.nativeEvent.pageX
                 })
             },
 
             onPanResponderRelease: (e, gestureState) => {
                 // Do something here for the touch end event
                 this.setState({
-                    offset: e.nativeEvent.pageY,
+                    offset: e.nativeEvent.pageX,
                     isDividerClicked: false
                 })
             }
@@ -54,7 +58,7 @@ export default class MyComponent extends Component {
 
                 {/* Top View */}
                 <Animated.View 
-                    style       = {[{backgroundColor: 'pink', minHeight: 40, flex: 1}, {height: this.state.topHeight}]}
+                    style       = {[{backgroundColor: 'red', minWidth: 40, flex: 1}, {width: this.state.leftWidth}]}
 
                 >
                  {/* this.props.childone?this.props.childone:null */}
@@ -62,15 +66,15 @@ export default class MyComponent extends Component {
 
                 {/* Divider */}
                 <View 
-                    style={[{height: 10}, this.state.isDividerClicked ? {backgroundColor: '#666'} : {backgroundColor: '#e2e2e2'}]} 
+                    style={[{width: 10}, this.state.isDividerClicked ? {backgroundColor: '#666'} : {backgroundColor: '#e2e2e2'}]} 
                     {...this._panResponder.panHandlers}
                 >
                 </View>
 
                 {/* Bottom View */}
                 <Animated.View 
-                    style={[{backgroundColor: 'green', minHeight: 40}, {height: this.state.bottomHeight}]} 
-
+                    style={[{backgroundColor: 'blue', minWidth: 40}, {width: this.state.rightWidth}]} 
+                   
                 >
                  {/* this.props.childTwo?this.props.childTwo:null */}
                 </Animated.View>
@@ -82,6 +86,6 @@ export default class MyComponent extends Component {
 const styles = StyleSheet.create({
     content         : {
         flex        : 1,
-        flexDirection: 'column'
+        flexDirection: 'row'
     },
 })
